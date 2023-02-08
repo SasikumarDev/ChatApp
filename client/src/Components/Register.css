@@ -1,0 +1,75 @@
+.registerWrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-radius: 0.3rem;
+    background: rgba(255, 255, 255, 0.05);
+    /* box-shadow: 0px 0px 2px 3px rgba(0, 0, 0, 25%); */
+    border-radius: 1px solid rgba(255, 255, 255, 25%);
+    /* backdrop-filter: blur(16px); */
+    flex-basis: 40%;
+    color: white;
+    gap: 2rem;
+}
+
+.divInputCtl {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.inputCtrl {
+    width: 95%;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+@media (max-width:380px) {
+    .registerWrapper {
+        flex-basis: 98%;
+    }
+
+    .inputCtrl {
+        width: 99%;
+    }
+}
+
+@media (min-width: 380px) and (max-width :425px) {
+    .registerWrapper {
+        flex-basis: 95%;
+    }
+
+    .inputCtrl {
+        width: 99%;
+    }
+}
+
+@media (min-width: 425px) and (max-width :768px) {
+    .registerWrapper {
+        flex-basis: 80%;
+    }
+
+    .inputCtrl {
+        width: 99%;
+    }
+}
+
+@media (min-width: 768px) and (max-width :1024px) {
+    .registerWrapper {
+        flex-basis: 70%;
+    }
+
+    .inputCtrl {
+        width: 99%;
+    }
+}
+
+.divBtnWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
