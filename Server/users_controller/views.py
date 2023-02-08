@@ -26,6 +26,7 @@ def getUserLists(request):
 @api_view(['POST'])
 def registerUser(request):
     res ={}
+    res['Error'] = False
     try:
         if not request.body:
             res['Message'] = 'Request body not found'
@@ -48,6 +49,7 @@ def registerUser(request):
         
         if extEmailID > 0:
             res['Message'] = f'email already exists {email}'
+            res['Error'] = True
             return JsonResponse(res,status=status.HTTP_200_OK)
         
         encPass = encryptString(str(req['password']).strip())
@@ -69,6 +71,6 @@ def registerUser(request):
     return JsonResponse(res,status=status.HTTP_200_OK)
 
 def encryptString(password:str) -> str:
-    if password is None:
+    if password is None or len(password) == 0:
         raise 'Password should not be empty'
     return str(hashlib.sha256(password.encode('utf-8')).hexdigest())

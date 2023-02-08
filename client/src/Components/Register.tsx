@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import "./Register.css";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Calendar } from 'primereact/calendar';
-
-
+import { Messages } from 'primereact/messages';
 
 interface IregisterProps {
     togglePageMethod(): void
@@ -23,6 +22,7 @@ interface IregisterInputs {
 
 const Register: React.FC<IregisterProps> = (props) => {
     const [registerInputs, setregisterInputs] = useState<IregisterInputs>();
+    const messageBox = useRef<Messages>(null);
     const validationSchema = Yup.object().shape({
         firstname: Yup.string().min(3, 'Min length of 3').max(30).required('First Name is required'),
         lastname: Yup.string().min(3, 'Min length 3').max(30).required('Last Name is required'),
@@ -34,19 +34,38 @@ const Register: React.FC<IregisterProps> = (props) => {
     const frmMik = useFormik({
         initialValues: {
             ...registerInputs
-            // firstname: '', lastname: '', dob: ''
         },
         validationSchema: validationSchema,
         onSubmit: (values, { setSubmitting }) => {
             setregisterInputs(values);
             console.log(values)
+            registerUser();
         }
     })
+
+    const registerUser = async () => {
+        let obj = {
+            fname: registerInputs?.firstname,
+            lname: registerInputs?.lastname,
+            email: registerInputs?.email,
+            password: registerInputs?.password,
+            dob: registerInputs?.dob
+        }
+        await fetch('http://127.0.0.1:8000/api/registerUser/', {
+            body: JSON.stringify(obj),
+            method: 'POST'
+        }).then((x: any) => {
+            console.log(x)
+        }).catch((ex) => {
+            messageBox?.current?.show({ severity: 'error', summary: 'Error', detail: 'Something went wrong.Please try later.', sticky: true })
+        })
+    }
     return (
         <form className="registerWrapper" onSubmit={frmMik.handleSubmit}>
             <div>
                 <h1>Sign up</h1>
             </div>
+            <Messages ref={messageBox} />
             <div className="divInputCtl">
                 <div className="field">
                     <span className="p-float-label">
@@ -95,7 +114,7 @@ const Register: React.FC<IregisterProps> = (props) => {
                     <span className="p-float-label">
                         <InputText id="password" name="password" value={frmMik.values.password} onChange={frmMik.handleChange} onBlur={frmMik.handleBlur}
                             className="inputCtrl p-inputtext-lg block" type="password" autoComplete="new-password" />
-                        <label htmlFor="email">Password</label>
+                        <label htmlFor="password">Password</label>
                     </span>
                     {
                         (frmMik.errors && frmMik.errors.password && (frmMik.touched?.password || false)) && <small className="p-error" >{frmMik.errors.password}</small>
@@ -104,8 +123,8 @@ const Register: React.FC<IregisterProps> = (props) => {
                 <div className="field">
                     <span className="p-float-label">
                         <InputText id="confirmpassword" name="confirmpassword" value={frmMik.values.confirmpassword} onChange={frmMik.handleChange} onBlur={frmMik.handleBlur}
-                            className="inputCtrl p-inputtext-lg block" type="confirmpassword" autoComplete="new-password" />
-                        <label htmlFor="email">Confirm Password</label>
+                            className="inputCtrl p-inputtext-lg block" type="password" autoComplete="new-password" />
+                        <label htmlFor="confirmpassword">Confirm Password</label>
                     </span>
                     {
                         (frmMik.errors && frmMik.errors.confirmpassword && (frmMik.touched?.confirmpassword || false)) && <small className="p-error" >{frmMik.errors.confirmpassword}</small>
