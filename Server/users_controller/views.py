@@ -7,8 +7,8 @@ from rest_framework import status
 import pymongo
 from bson.json_util import dumps
 import json
-from .models import registerUserSerilizer
-import hashlib
+from .models import registerUserSerilizer,loginUserSerializer
+from Common.common import encryptString, validateRequestBody
 
 
 # Create your views here.
@@ -28,18 +28,11 @@ def registerUser(request):
     res ={}
     res['Error'] = False
     try:
-        if not request.body:
-            res['Message'] = 'Request body not found'
+        res = validateRequestBody(request = request,serializer = registerUserSerilizer)
+        if res and res.get('Error') == True:
             return JsonResponse(res,status=status.HTTP_400_BAD_REQUEST)
-
-        req = json.loads(request.body.decode("utf-8"))
-
-        Serlizer = registerUserSerilizer(data= req)
-
-        if not Serlizer.is_valid():
-            res['Message'] = Serlizer.errors
-            return JsonResponse(res,status=status.HTTP_400_BAD_REQUEST)
-            
+        
+        req = json.loads(request.body.decode("utf-8"))    
         db = client['ChatApp']
         usersCollection = db['Users']
 
@@ -70,7 +63,19 @@ def registerUser(request):
     res['Message']="Registered Successfully"
     return JsonResponse(res,status=status.HTTP_200_OK)
 
-def encryptString(password:str) -> str:
-    if password is None or len(password) == 0:
-        raise 'Password should not be empty'
-    return str(hashlib.sha256(password.encode('utf-8')).hexdigest())
+@api_view(['POST'])
+def login(request):
+    res = {'Error':False,'Message':''}
+    try:
+        res = validateRequestBody(request = request,serializer = loginUserSerializer)
+        if res and res.get('Error') == True:
+            return JsonResponse(res,status=status.HTTP_400_BAD_REQUEST)
+        
+        req = json.loads(request.body.decode("utf-8"))
+
+    except json.JSONDecodeError as ex:
+        res['Message'] = ex
+        res['Error'] = True
+        return JsonResponse(res,status=status.HTTP_400_BAD_REQUEST)
+
+    return JsonResponse(res,status = status.HTTP_200_OK)

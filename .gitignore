@@ -22,3 +22,23 @@
 /client/yarn-debug.log*
 /client/yarn-error.log*
 points.txt
+
+**__pycache__**
+
+# Django-related files
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+
+# Environments
+.env
+.venv
+venv/
+ENV/
+
+# IDE-specific files
+.idea/
+.vscode/

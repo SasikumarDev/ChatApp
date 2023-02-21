@@ -34,3 +34,7 @@ class registerUserSerilizer(serializers.Serializer):
         except ValidationError as ex:
             raise ex
         return value
+
+class loginUserSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True,max_length = 60,min_length = 3)
+    password = serializers.CharField(required = True,max_length = 30,min_length = 8)

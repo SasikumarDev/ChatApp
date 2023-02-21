@@ -44,6 +44,7 @@ const Register: React.FC<IregisterProps> = (props) => {
     })
 
     const registerUser = async () => {
+        messageBox?.current?.clear();
         let obj = {
             fname: registerInputs?.firstname,
             lname: registerInputs?.lastname,
@@ -51,14 +52,22 @@ const Register: React.FC<IregisterProps> = (props) => {
             password: registerInputs?.password,
             dob: registerInputs?.dob
         }
-        await fetch('http://127.0.0.1:8000/api/registerUser/', {
+        let response = await fetch('http://127.0.0.1:8000/api/registerUser/', {
             body: JSON.stringify(obj),
             method: 'POST'
-        }).then((x: any) => {
-            console.log(x)
+        }).then(async (x: any) => {
+            let json = await x.json();
+            console.log(json)
+            return json
         }).catch((ex) => {
-            messageBox?.current?.show({ severity: 'error', summary: 'Error', detail: 'Something went wrong.Please try later.', sticky: true })
-        })
+            messageBox?.current?.show({ severity: 'error', detail: 'Something went wrong.Please try later.', sticky: true })
+            return null;
+        });
+        if (response) {
+            if (response?.Error) {
+                messageBox?.current?.show({ severity: 'error', detail: response?.Message, sticky: true })
+            }
+        }
     }
     return (
         <form className="registerWrapper" onSubmit={frmMik.handleSubmit}>
