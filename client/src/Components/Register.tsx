@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import "./Register.css";
@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { Calendar } from 'primereact/calendar';
 import { Messages } from 'primereact/messages';
+import { GlobalContext } from "../Context/globalContext";
 
 interface IregisterProps {
     togglePageMethod(): void
@@ -21,6 +22,7 @@ interface IregisterInputs {
 }
 
 const Register: React.FC<IregisterProps> = (props) => {
+    const globalcontext = useContext(GlobalContext);
     const [registerInputs, setregisterInputs] = useState<IregisterInputs>();
     const messageBox = useRef<Messages>(null);
     const validationSchema = Yup.object().shape({
@@ -38,8 +40,9 @@ const Register: React.FC<IregisterProps> = (props) => {
         validationSchema: validationSchema,
         onSubmit: (values, { setSubmitting }) => {
             setregisterInputs(values);
-            console.log(values)
+            globalcontext?.setloading(true);
             registerUser();
+            globalcontext?.setloading(false);
         }
     })
 

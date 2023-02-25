@@ -39,3 +39,7 @@ def validateRequestBody(**kwargs):
     except json.JSONDecodeError as ex:
         res['Message'] = ex
         return res
+    
+def logdata(**kwargs):
+    print(kwargs)
+    return None

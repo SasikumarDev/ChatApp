@@ -1,0 +1,26 @@
+import React, { createContext, useState } from "react";
+import { loggedUser } from "../Models/Model";
+
+type GlobalContextType = {
+    data: loggedUser;
+    setuserDetails: (data: any) => void,
+    setloading: (data: boolean) => void
+}
+export const GlobalContext = createContext<GlobalContextType | null>(null);
+
+const GlobalProvider: React.FC<any> = ({ children }) => {
+    const [gstate, Setgstate] = useState<loggedUser>({ loading: false, userDetails: {} });
+
+    const setuserDetails = (data: any) => {
+        Setgstate({ ...gstate, userDetails: data });
+    }
+
+    const setloading = (data: boolean) => {
+        Setgstate({ ...gstate, loading: data });
+    }
+    return <GlobalContext.Provider value={{ data: gstate, setloading, setuserDetails }}>
+        {children}
+    </GlobalContext.Provider>
+}
+
+export default GlobalProvider;
