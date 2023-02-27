@@ -22,8 +22,11 @@ interface IregisterInputs {
 }
 
 const Register: React.FC<IregisterProps> = (props) => {
-    const globalcontext = useContext(GlobalContext);
     const [registerInputs, setregisterInputs] = useState<IregisterInputs>();
+
+    const globalcontext = useContext(GlobalContext);
+    const API_URL = process.env.REACT_APP_BASE_URL;
+
     const messageBox = useRef<Messages>(null);
     const validationSchema = Yup.object().shape({
         firstname: Yup.string().min(3, 'Min length of 3').max(30).required('First Name is required'),
@@ -55,7 +58,7 @@ const Register: React.FC<IregisterProps> = (props) => {
             password: registerInputs?.password,
             dob: registerInputs?.dob
         }
-        let response = await fetch('http://127.0.0.1:8000/api/registerUser/', {
+        let response = await fetch(`${API_URL}api/registerUser/`, {
             body: JSON.stringify(obj),
             method: 'POST'
         }).then(async (x: any) => {
