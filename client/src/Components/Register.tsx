@@ -22,7 +22,14 @@ interface IregisterInputs {
 }
 
 const Register: React.FC<IregisterProps> = (props) => {
-    const [registerInputs, setregisterInputs] = useState<IregisterInputs>();
+    const [registerInputs, setregisterInputs] = useState<IregisterInputs>({
+        firstname:'',
+        confirmpassword:'',
+        dob:'',
+        email:'',
+        lastname:'',
+        password:''
+    });
 
     const globalcontext = useContext(GlobalContext);
     const API_URL = process.env.REACT_APP_BASE_URL;
