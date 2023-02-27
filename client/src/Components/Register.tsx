@@ -49,7 +49,7 @@ const Register: React.FC<IregisterProps> = (props) => {
         },
         validationSchema: validationSchema,
         onSubmit: (values, { setSubmitting }) => {
-            setregisterInputs(values);
+            setregisterInputs({...values});
             globalcontext?.setloading(true);
             registerUser();
             globalcontext?.setloading(false);
