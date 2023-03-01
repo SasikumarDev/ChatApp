@@ -8,7 +8,7 @@ import pymongo
 from bson.json_util import dumps
 import json
 from .models import registerUserSerilizer,loginUserSerializer
-from Common.common import encryptString, validateRequestBody
+from Common.common import encryptString, validateRequestBody,generateJWT
 
 
 # Create your views here.
@@ -72,6 +72,7 @@ def login(request):
             return JsonResponse(res,status=status.HTTP_400_BAD_REQUEST)
         
         req = json.loads(request.body.decode("utf-8"))
+        res['Token'] = generateJWT(req)
 
     except json.JSONDecodeError as ex:
         res['Message'] = ex

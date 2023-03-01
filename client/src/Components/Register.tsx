@@ -50,17 +50,16 @@ const Register: React.FC<IregisterProps> = (props) => {
         validationSchema: validationSchema,
         onSubmit: (values, { setSubmitting }) => {
             setregisterInputs({...values});
-            globalcontext?.setloading(true);
             registerUser();
-            globalcontext?.setloading(false);
         }
     })
-
+    
     useEffect(() => {
         setregisterInputs({...frmMik.values});
     },[frmMik.values])
-
+    
     const registerUser = async () => {
+        globalcontext?.setloading(true);
         messageBox?.current?.clear();
         let obj = {
             fname: registerInputs?.firstname,
@@ -84,6 +83,7 @@ const Register: React.FC<IregisterProps> = (props) => {
                 messageBox?.current?.show({ severity: 'error', detail: response?.Message, sticky: true })
             }
         }
+        globalcontext?.setloading(false);
     }
     return (
         <form className="registerWrapper" onSubmit={frmMik.handleSubmit}>

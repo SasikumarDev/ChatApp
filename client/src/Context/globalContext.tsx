@@ -15,8 +15,12 @@ const GlobalProvider: React.FC<any> = ({ children }) => {
         Setgstate({ ...gstate, userDetails: data });
     }
 
-    const setloading = (data: boolean) => {
-        Setgstate({ ...gstate, loading: data });
+    const setloading = (isLoading: boolean) => {
+        // Setgstate({ ...gstate,loading:data });
+        Setgstate(prev => ({
+            ...prev,
+            loading: isLoading
+        }))
     }
     return <GlobalContext.Provider value={{ data: gstate, setloading, setuserDetails }}>
         {children}

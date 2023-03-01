@@ -1,6 +1,7 @@
 import hashlib
 import json
 from rest_framework.request import Request
+import base64
 
 def encryptString(password:str) -> str:
     if password is None or len(password) == 0:
@@ -43,3 +44,19 @@ def validateRequestBody(**kwargs):
 def logdata(**kwargs):
     print(kwargs)
     return None
+
+def generateJWT(payload:dict):
+    if payload is None or len(payload) == 0:
+        raise Exception(Message="Invalid payload")
+    algo = {
+        "alg": "HS256",
+        "typ": "JWT"
+    }
+
+    token = json.dumps(algo)+"."+json.dumps(payload)
+    hash_val = hashlib.sha256(token.encode('utf-8')).hexdigest()
+    obj_1 = str(base64.b64encode(json.dumps(algo).encode('utf-8')).decode('utf-8'))
+    obj_2 = str(base64.b64encode(json.dumps(payload).encode('utf-8')).decode('utf-8'))
+    token = obj_1+"."+obj_2+"."+hash_val
+
+    return token

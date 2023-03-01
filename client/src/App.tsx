@@ -8,9 +8,7 @@ function App() {
   const globalcontext = useContext(GlobalContext);
   return (
     <div className="App">
-      {
-        globalcontext?.data.loading && <Loader />
-      }
+      {globalcontext?.data.loading && <Loader />}
       <Default />
     </div>
   );
