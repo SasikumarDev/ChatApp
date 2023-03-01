@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import "./Register.css";
@@ -56,6 +56,10 @@ const Register: React.FC<IregisterProps> = (props) => {
         }
     })
 
+    useEffect(() => {
+        setregisterInputs({...frmMik.values});
+    },[frmMik.values])
+
     const registerUser = async () => {
         messageBox?.current?.clear();
         let obj = {
@@ -70,7 +74,6 @@ const Register: React.FC<IregisterProps> = (props) => {
             method: 'POST'
         }).then(async (x: any) => {
             let json = await x.json();
-            console.log(json)
             return json
         }).catch((ex) => {
             messageBox?.current?.show({ severity: 'error', detail: 'Something went wrong.Please try later.', sticky: true })
@@ -112,8 +115,6 @@ const Register: React.FC<IregisterProps> = (props) => {
                 </div>
                 <div className="field">
                     <span className="p-float-label">
-                        {/* <InputText id="dob" name="dob" value={frmMik.values.dob} onChange={frmMik.handleChange} onBlur={frmMik.handleBlur}
-                            className="inputCtrl p-inputtext-lg block" type="date" autoComplete="off" /> */}
                         <Calendar id="dob" name="dob" value={frmMik.values.dob} onChange={frmMik.handleChange} onBlur={frmMik.handleBlur}
                             className="inputCtrl p-inputtext-lg block" />
                         <label htmlFor="dob">Date of Birth</label>
