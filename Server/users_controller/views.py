@@ -88,11 +88,15 @@ def login(request):
             res['Message'] = "Invalid username/email"
             res['Error'] = True
             return JsonResponse(res, status=status.HTTP_400_BAD_REQUEST)
-
-        print(usrs['_id'])
+        
+        if encryptString(req['password']) != usrs['password']:
+            res['Message'] = "Invalid username/email"
+            res['Error'] = True
+            return JsonResponse(res, status=status.HTTP_400_BAD_REQUEST)
+        
         _token = jwt.encode(payload={"id": str(
             usrs['_id']), "email": usrs['email']}, key=os.getenv('jwtScret'), algorithm='HS256')
-        res['Token'] = _token  # generateJWT(req)
+        res['Token'] = _token
 
     except json.JSONDecodeError as ex:
         res['Message'] = ex

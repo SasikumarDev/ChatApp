@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import { Calendar } from 'primereact/calendar';
 import { Messages } from 'primereact/messages';
 import { GlobalContext } from "../Context/globalContext";
+import useLocalStorage from "../Hooks/useLocalStorage";
 
 interface IregisterProps {
     togglePageMethod(): void
@@ -23,13 +24,15 @@ interface IregisterInputs {
 
 const Register: React.FC<IregisterProps> = (props) => {
     const [registerInputs, setregisterInputs] = useState<IregisterInputs>({
-        firstname:'',
-        confirmpassword:'',
-        dob:'',
-        email:'',
-        lastname:'',
-        password:''
+        firstname: '',
+        confirmpassword: '',
+        dob: '',
+        email: '',
+        lastname: '',
+        password: ''
     });
+
+    const localStorage = useLocalStorage();
 
     const globalcontext = useContext(GlobalContext);
     const API_URL = process.env.REACT_APP_BASE_URL;
@@ -49,15 +52,15 @@ const Register: React.FC<IregisterProps> = (props) => {
         },
         validationSchema: validationSchema,
         onSubmit: (values, { setSubmitting }) => {
-            setregisterInputs({...values});
+            setregisterInputs({ ...values });
             registerUser();
         }
     })
-    
+
     useEffect(() => {
-        setregisterInputs({...frmMik.values});
-    },[frmMik.values])
-    
+        setregisterInputs({ ...frmMik.values });
+    }, [frmMik.values])
+
     const registerUser = async () => {
         globalcontext?.setloading(true);
         messageBox?.current?.clear();
@@ -82,6 +85,7 @@ const Register: React.FC<IregisterProps> = (props) => {
             if (response?.Error) {
                 messageBox?.current?.show({ severity: 'error', detail: response?.Message, sticky: true })
             }
+            localStorage.setValue('registerValue', JSON.stringify(response))
         }
         globalcontext?.setloading(false);
     }
